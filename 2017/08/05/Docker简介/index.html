@@ -93,13 +93,28 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="LT&#39;s Notes">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="一、Docker简介Docker是一个由GO语言开发的，基于LXCs(Linux containers)的高级容器引擎，实现了一种应用程序级别的隔离，源代码托管在Github上,遵从Apache2.0协议开源。 Container技术并非Docker的创新，很多云服务商都采用了类似这种轻量级的虚拟化技术，但Docker是第一个将这这种Container技术大规模开源并被社区广泛接受的。 Docke">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker简介">
+<meta property="og:url" content="http://yoursite.com/2017/08/05/Docker简介/index.html">
 <meta property="og:site_name" content="LT&#39;s Notes">
+<meta property="og:description" content="一、Docker简介Docker是一个由GO语言开发的，基于LXCs(Linux containers)的高级容器引擎，实现了一种应用程序级别的隔离，源代码托管在Github上,遵从Apache2.0协议开源。 Container技术并非Docker的创新，很多云服务商都采用了类似这种轻量级的虚拟化技术，但Docker是第一个将这这种Container技术大规模开源并被社区广泛接受的。 Docke">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/764980-37bfc1d698d4a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://docs.docker.com/engine/article-img/engine-components-flow.png">
+<meta property="og:image" content="https://docs.docker.com/engine/article-img/architecture.svg">
+<meta property="og:image" content="http://cdn.infoqstatic.com/statics_s1_20170523-0350/resource/articles/docker-network-and-pipework-open-source-explanation-practice/zh/resources/1419249139653.png">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/625411-4159f9f26e5075b3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/907596/201705/907596-20170517110100869-2022531474.jpg">
+<meta property="og:image" content="http://7u2qr4.com1.z0.glb.clouddn.com/blog_%E5%9B%BE%E7%89%871.png">
+<meta property="og:image" content="http://7u2qr4.com1.z0.glb.clouddn.com/blog_%E5%9B%BE%E7%89%872.png">
+<meta property="og:image" content="http://7u2qr4.com1.z0.glb.clouddn.com/blog_%E5%9B%BE%E7%89%873.png">
+<meta property="og:image" content="http://7u2qr4.com1.z0.glb.clouddn.com/blog_TimLine%E6%88%AA%E5%9B%BE20150226143346.png">
+<meta property="og:updated_time" content="2017-08-05T02:59:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LT&#39;s Notes">
+<meta name="twitter:title" content="Docker简介">
+<meta name="twitter:description" content="一、Docker简介Docker是一个由GO语言开发的，基于LXCs(Linux containers)的高级容器引擎，实现了一种应用程序级别的隔离，源代码托管在Github上,遵从Apache2.0协议开源。 Container技术并非Docker的创新，很多云服务商都采用了类似这种轻量级的虚拟化技术，但Docker是第一个将这这种Container技术大规模开源并被社区广泛接受的。 Docke">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/764980-37bfc1d698d4a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -127,13 +142,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/05/Docker简介/"/>
 
 
 
 
 
-  <title>LT's Notes</title>
+  <title>Docker简介 | LT's Notes</title>
   
 
 
@@ -158,9 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -243,9 +256,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -271,9 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/05/Docker简介/" itemprop="url">Docker简介</a></h1>
+          <h1 class="post-title" itemprop="name headline">Docker简介</h1>
         
 
         <div class="post-meta">
@@ -320,9 +331,7 @@
       
 
       
-        
-          
-            <h2 id="一、Docker简介"><a href="#一、Docker简介" class="headerlink" title="一、Docker简介"></a><strong>一、Docker简介</strong></h2><p>Docker是一个由GO语言开发的，基于LXCs(Linux containers)的高级容器引擎，实现了一种应用程序级别的隔离，源代码托管在Github上,遵从Apache2.0协议开源。</p>
+        <h2 id="一、Docker简介"><a href="#一、Docker简介" class="headerlink" title="一、Docker简介"></a><strong>一、Docker简介</strong></h2><p>Docker是一个由GO语言开发的，基于LXCs(Linux containers)的高级容器引擎，实现了一种应用程序级别的隔离，源代码托管在Github上,遵从Apache2.0协议开源。</p>
 <p>Container技术并非Docker的创新，很多云服务商都采用了类似这种轻量级的虚拟化技术，但Docker是第一个将这这种Container技术大规模开源并被社区广泛接受的。</p>
 <p>Docker使用以下操作系统的功能来提高容器技术的效率：</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/764980-37bfc1d698d4a95b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="原理图"></p>
@@ -486,20 +495,27 @@
 <p>母公司在这方面也做了一些积累，但要复杂很多，是基于openstack上又增加了docker，这样做的原因有很多，并且上海那边自己做了一套部署管理系统（貌似不好用，经常自己挂掉）。我们从人力和场景考虑，尽量复用相对成熟的、主流的开源组件可能更实际一些。</p>
 <p>如果全部采用容器化，应该有不少的对应工作要处理，比如应用和本地存储数据要做到自然隔离，操作系统是否能够做到解耦等，还要具体问题具体分析，需要逐步优化。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -507,252 +523,38 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/28/Summer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LT">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LT's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/28/Summer/" itemprop="url">Summer</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-28T00:03:29+08:00">
-                2017-07-28
-              </time>
+              <a href="/2017/07/28/Summer/" rel="next" title="Summer">
+                <i class="fa fa-chevron-left"></i> Summer
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/27/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LT">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LT's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/27/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T23:59:56+08:00">
-                2017-07-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -760,6 +562,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -780,8 +586,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -825,6 +640,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Docker简介"><span class="nav-number">1.</span> <span class="nav-text">一、Docker简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Docker自身的组件与元素"><span class="nav-number">2.</span> <span class="nav-text">二、Docker自身的组件与元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Docker-Client-amp-Docker-Daemon"><span class="nav-number">2.0.1.</span> <span class="nav-text">1. Docker Client & Docker Daemon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Docker镜像"><span class="nav-number">2.0.2.</span> <span class="nav-text">2. Docker镜像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Docker容器"><span class="nav-number">2.0.3.</span> <span class="nav-text">5. Docker容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Docker仓库"><span class="nav-number">2.0.4.</span> <span class="nav-text">4. Docker仓库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Docker的运行流程"><span class="nav-number">3.</span> <span class="nav-text">三、Docker的运行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、Docker的组网模式"><span class="nav-number">4.</span> <span class="nav-text">四、Docker的组网模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-host模式，使用–net-host指定"><span class="nav-number">4.1.</span> <span class="nav-text">1. host模式，使用–net=host指定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-container模式，使用–net-container-NAME-or-ID指定"><span class="nav-number">4.2.</span> <span class="nav-text">2. container模式，使用–net=container:NAME_or_ID指定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-none模式，使用–net-none指定"><span class="nav-number">4.3.</span> <span class="nav-text">3. none模式，使用–net=none指定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-bridge模式，使用–net-bridge指定，默认设置"><span class="nav-number">4.4.</span> <span class="nav-text">4. bridge模式，使用–net=bridge指定，默认设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-Bridge模式下的拓扑"><span class="nav-number">4.4.1.</span> <span class="nav-text">4.1 Bridge模式下的拓扑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Bridge模式下容器的通信"><span class="nav-number">4.4.2.</span> <span class="nav-text">4.2 Bridge模式下容器的通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">4.4.3.</span> <span class="nav-text">说明:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#演进中的网络模型"><span class="nav-number">4.4.4.</span> <span class="nav-text">演进中的网络模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-共享网络命名空间"><span class="nav-number">4.5.</span> <span class="nav-text">5. 共享网络命名空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Docker运行时资源限制"><span class="nav-number">5.</span> <span class="nav-text">五、Docker运行时资源限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内存限制"><span class="nav-number">5.1.</span> <span class="nav-text">1. 内存限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-CPU限制"><span class="nav-number">5.2.</span> <span class="nav-text">2.CPU限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-磁盘IO配额控制"><span class="nav-number">5.3.</span> <span class="nav-text">3.磁盘IO配额控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-磁盘空间限制"><span class="nav-number">5.4.</span> <span class="nav-text">4.磁盘空间限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、与虚拟机的对比"><span class="nav-number">6.</span> <span class="nav-text">六、与虚拟机的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-实现原理"><span class="nav-number">6.1.</span> <span class="nav-text">1. 实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-计算效率"><span class="nav-number">6.2.</span> <span class="nav-text">2. 计算效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-内存访问效率"><span class="nav-number">6.3.</span> <span class="nav-text">3. 内存访问效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-启动时间及资源耗费"><span class="nav-number">6.4.</span> <span class="nav-text">4. 启动时间及资源耗费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Docker的劣势"><span class="nav-number">6.5.</span> <span class="nav-text">5. Docker的劣势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、Docker的应用场景"><span class="nav-number">7.</span> <span class="nav-text">七、Docker的应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-简化配置"><span class="nav-number">7.1.</span> <span class="nav-text">1. 简化配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-代码流水线（Code-Pipeline）"><span class="nav-number">7.2.</span> <span class="nav-text">2. 代码流水线（Code Pipeline）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-提高开发效率"><span class="nav-number">7.3.</span> <span class="nav-text">3. 提高开发效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-隔离应用"><span class="nav-number">7.4.</span> <span class="nav-text">4. 隔离应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-整合服务器"><span class="nav-number">7.5.</span> <span class="nav-text">5. 整合服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-调试能力"><span class="nav-number">7.6.</span> <span class="nav-text">6. 调试能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-多租户环境"><span class="nav-number">7.7.</span> <span class="nav-text">7. 多租户环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-快速部署"><span class="nav-number">7.8.</span> <span class="nav-text">8. 快速部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-从轻量级工具、持续集成演进到微服务架构"><span class="nav-number">7.9.</span> <span class="nav-text">9. 从轻量级工具、持续集成演进到微服务架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、我们的需求及考虑"><span class="nav-number">8.</span> <span class="nav-text">八、我们的需求及考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-需求场景"><span class="nav-number">8.1.</span> <span class="nav-text">1. 需求场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-其他的一些考虑"><span class="nav-number">8.2.</span> <span class="nav-text">2. 其他的一些考虑</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -938,10 +769,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
