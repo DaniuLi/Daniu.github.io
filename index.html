@@ -254,6 +254,206 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/05/Docker环境构建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LT's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/05/Docker环境构建/" itemprop="url">Docker环境构建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-05T11:01:54+08:00">
+                2017-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一-版本及系统要求"><a href="#一-版本及系统要求" class="headerlink" title="一. 版本及系统要求"></a>一. 版本及系统要求</h2><h3 id="1-Docker版本说明"><a href="#1-Docker版本说明" class="headerlink" title="1. Docker版本说明"></a>1. Docker版本说明</h3><p>2017/3/3，Docker官方发表了一篇博客，Docker版本从1.13.*直接跳入17.03，该版本的意思是17年3月。同时，还声明了Docker以后会以CE（Community Edition）和EE（Enterprise Edition）的形式发布。其中，CE版本每个月发布一次，也就是说，随后的版本就是17.03、17.04、17.05等，而EE的版本是没三个月发布一次，对应的就是17.03、17.06等。对于发布的每个EE版本，Docker官网都会提供一年的技术支持。</p>
+<center>CE和EE在各发行版的支持情况<br><br>Platform| Docker EE | Docker CE<br>———|———-|———<br>Ubuntu | yes | yes<br>Debian |  | yes<br>Red Hat Enterprise Linux yes |     yes |<br>CentOS | yes | yes<br>Fedora | | yes<br>Oracle Linux | yes |<br>SUSE Linux Enterprise Server | yes |<br>Microsoft Windows Server 2016 | yes |<br>Microsoft Windows 10 | | yes<br>macOS | | yes<br>Microsoft Azure | yes | yes<br>Amazon Web Services | yes | yes<br></center>
+
+
+<h3 id="2-对linux内核版本的要求"><a href="#2-对linux内核版本的要求" class="headerlink" title="2. 对linux内核版本的要求"></a>2. 对linux内核版本的要求</h3><p>docker对linux内核版本有要求，内核版本不能太低， 如果太低会导致docker的一些功能不能使用， docker官方文档要求至少3.8以上，建议3.10以上。</p>
+<p>考虑到通用性，计划采用CentOS版本，目前Centos 7 使用的内核版本为3.10。</p>
+<pre><code>注：中兴新支点的CGSL来源于开源社区，由开源社区的源代码构建，在提供CGSL版本的时候，参考了CentOS (对应于RHEL的开源版本)所用的内核版本号和相关软件包， 并根据实际需要选取了他们所用的补丁集(毕竟红帽所用的方案是业界公认比较出色的)。因此，CGSL与RHEL是高度兼容的。
+
+CGSL V3 在今年生命周期已到最后阶段，后续不再发货，其内核版本为 2.6.18-164；
+CGSL V4 内核版本为2.6.32，V4系列版本现已进入成熟期，稳定商用多年，建议在没特殊要求的情况下使用此版本。
+CGSL V5 内核版本为3.10.0 , 此版本完美适配虚拟化，如环境需要用于虚拟化的场景，建议使用此版本。
+</code></pre><h3 id="3-CentOS的安装"><a href="#3-CentOS的安装" class="headerlink" title="3. CentOS的安装"></a>3. CentOS的安装</h3><p>版本：CentOS-7-x86_64-DVD-1511.iso</p>
+<p>内核：3.10.0-327.el7.x86_64</p>
+<p>安装过程略</p>
+<h3 id="4-构建本地CentOS的YUM源"><a href="#4-构建本地CentOS的YUM源" class="headerlink" title="4. 构建本地CentOS的YUM源"></a>4. 构建本地CentOS的YUM源</h3><p>基于光盘ISO文件进行挂载</p>
+<pre><code>mount -t iso9660 /home/hello/CentOS-7-x86_64-DVD-1511.iso /mnt/cdrom/
+</code></pre><p> 在/etc/yum.repos.d/下新建repo文件，内容如下：</p>
+<pre><code>[local_server]
+name=This is a local repo
+baseurl=file:///mnt/cdrom
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+</code></pre><p>然后执行</p>
+<pre><code>yum clean
+yum makecache
+</code></pre><h3 id="5-Docker的安装"><a href="#5-Docker的安装" class="headerlink" title="5. Docker的安装"></a>5. Docker的安装</h3><p>受限公司的网络，采用官方文档中的如下方式进行离线安装：</p>
+<h4 id="Install-from-a-package"><a href="#Install-from-a-package" class="headerlink" title="Install from a package"></a>Install from a package</h4><p>If you cannot use Docker’s repository to install Docker, you can download the .rpm file for your release and install it manually. You will need to download a new file each time you want to upgrade Docker.</p>
+<h5 id="1-Go-to-https-download-docker-com-linux-centos-7-x86-64-stable-Packages-and-download-the-rpm-file-for-the-Docker-version-you-want-to-install"><a href="#1-Go-to-https-download-docker-com-linux-centos-7-x86-64-stable-Packages-and-download-the-rpm-file-for-the-Docker-version-you-want-to-install" class="headerlink" title="1. Go to https://download.docker.com/linux/centos/7/x86_64/stable/Packages/ and download the .rpm file for the Docker version you want to install."></a>1. Go to <a href="https://download.docker.com/linux/centos/7/x86_64/stable/Packages/" target="_blank" rel="external">https://download.docker.com/linux/centos/7/x86_64/stable/Packages/</a> and download the .rpm file for the Docker version you want to install.</h5><h5 id="2-Install-Docker-CE-changing-the-path-below-to-the-path-where-you-downloaded-the-Docker-package"><a href="#2-Install-Docker-CE-changing-the-path-below-to-the-path-where-you-downloaded-the-Docker-package" class="headerlink" title="2. Install Docker CE, changing the path below to the path where you downloaded the Docker package."></a>2. Install Docker CE, changing the path below to the path where you downloaded the Docker package.</h5><pre><code>$ sudo yum install /path/to/package.rpm
+</code></pre><h3 id="6-Docker官方镜像加速"><a href="#6-Docker官方镜像加速" class="headerlink" title="6. Docker官方镜像加速"></a>6. Docker官方镜像加速</h3><h4 id="6-1-修改镜像源"><a href="#6-1-修改镜像源" class="headerlink" title="6.1 修改镜像源"></a>6.1 修改镜像源</h4><p>通过 Docker 官方镜像加速，中国区用户能够快速访问最流行的 Docker 镜像。该镜像托管于中国大陆，本地用户现在将会享受到更快的下载速度和更强的稳定性，从而能够更敏捷地开发和交付 Docker 化应用。</p>
+<p>Docker 中国官方镜像加速可通过 registry.docker-cn.com 访问。该镜像库只包含流行的公有镜像。私有镜像仍需要从美国镜像库中拉取。</p>
+<p>修改 /etc/docker/daemon.json 文件并添加上 registry-mirrors 键值，保存后重启docker以生效</p>
+<pre><code>{
+&quot;registry-mirrors&quot;: [&quot;https://registry.docker-cn.com&quot;]
+}
+</code></pre><h4 id="6-2-内网代理设置"><a href="#6-2-内网代理设置" class="headerlink" title="6.2 内网代理设置"></a>6.2 内网代理设置</h4><p>First, create a systemd drop-in directory for the docker service:</p>
+<pre><code>mkdir /etc/systemd/system/docker.service.d
+</code></pre><p>Now create a file called /etc/systemd/system/docker.service.d/http-proxy.conf that adds the HTTP_PROXY environment variable:</p>
+<pre><code>[Service]
+Environment=&quot;HTTP_PROXY=http://proxy.example.com:80/&quot;
+</code></pre><p>If you have internal Docker registries that you need to contact without proxying you can specify them via the NO_PROXY environment variable:</p>
+<pre><code>Environment=&quot;HTTP_PROXY=http://proxy.example.com:80/&quot;
+Environment=&quot;NO_PROXY=localhost,127.0.0.0/8,docker-registry.somecorporation.com&quot;
+</code></pre><p>Flush changes:</p>
+<pre><code>$ sudo systemctl daemon-reload
+</code></pre><p>Verify that the configuration has been loaded:</p>
+<pre><code>$ sudo systemctl show docker --property Environment
+Environment=HTTP_PROXY=http://proxy.example.com:80/
+</code></pre><p>Restart Docker:</p>
+<pre><code>$ sudo systemctl restart docker
+</code></pre><h3 id="7-验证环境"><a href="#7-验证环境" class="headerlink" title="7. 验证环境"></a>7. 验证环境</h3><h4 id="7-1-从Docker仓库获取一个镜像"><a href="#7-1-从Docker仓库获取一个镜像" class="headerlink" title="7.1 从Docker仓库获取一个镜像"></a>7.1 从Docker仓库获取一个镜像</h4><pre><code>[root@localhost hello]# docker pull hello-world
+Using default tag: latest
+latest: Pulling from library/hello-world
+b04784fba78d: Pull complete 
+Digest: sha256:f3b3b28a45160805bb16542c9531888519430e9e6d6ffc09d72261b0d26ff74f
+Status: Downloaded newer image for hello-world:latest
+</code></pre><h4 id="7-2-查看本地镜像"><a href="#7-2-查看本地镜像" class="headerlink" title="7.2 查看本地镜像"></a>7.2 查看本地镜像</h4><pre><code>[root@localhost hello]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+hello-world         latest              1815c82652c0        7 weeks ago         1.84kB
+</code></pre><ol>
+<li>REPOSITORY：该字段包括两部分，第一部分是仓库名字（docker.io），第二部分是镜像包的名字。</li>
+<li>TAG：用来表征镜像的版本号，默认情况下拖取最新版本（latest），也可以指定镜像的具体版本。</li>
+<li>IMAGE_ID：一个哈希值，用来唯一标志一个镜像文件。</li>
+<li>CREATED：镜像创建的时间。</li>
+<li>VIRTUAL SIZE：镜像的大小。</li>
+</ol>
+<h4 id="7-3-利用镜像包启动一个容器"><a href="#7-3-利用镜像包启动一个容器" class="headerlink" title="7.3 利用镜像包启动一个容器"></a>7.3 利用镜像包启动一个容器</h4><pre><code>[root@localhost hello]# docker run hello-world
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+1. The Docker client contacted the Docker daemon.
+2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.
+3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+$ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+https://cloud.docker.com/
+
+For more examples and ideas, visit:
+https://docs.docker.com/engine/userguide/
+</code></pre><h4 id="8-小结"><a href="#8-小结" class="headerlink" title="8. 小结"></a>8. 小结</h4><p>目前公司访问外网，特别是在linux上直接访问外网，是相当的有问题。</p>
+<p>后续考虑搭建内网私服，需要单独开一章节来进行说明。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/05/Docker简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -630,126 +830,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/27/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LT">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LT's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/27/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T23:59:56+08:00">
-                2017-07-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -804,6 +884,15 @@
 
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
