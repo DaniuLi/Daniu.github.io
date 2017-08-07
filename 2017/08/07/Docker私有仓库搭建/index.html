@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Docker," />
 
 
 
@@ -93,14 +93,18 @@
 
 
 
+<meta name="description" content="私有仓库搭建Docker Registry官方提供了Docker Hub网站来作为一个公开的集中仓库。然而，本地访问Docker Hub速度往往很慢，并且很多时候我们需要一个本地的私有仓库只供网内使用。 Docker仓库实际上提供两方面的功能，一个是镜像管理，一个是认证。前者主要由docker-registry项目来实现，通过http服务来上传下载；后者可以通过docker-index（闭源）项目">
+<meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Summer">
-<meta property="og:url" content="http://yoursite.com/2017/07/28/Summer/index.html">
+<meta property="og:title" content="Docker私有仓库搭建">
+<meta property="og:url" content="http://yoursite.com/2017/08/07/Docker私有仓库搭建/index.html">
 <meta property="og:site_name" content="LT&#39;s Notes">
+<meta property="og:description" content="私有仓库搭建Docker Registry官方提供了Docker Hub网站来作为一个公开的集中仓库。然而，本地访问Docker Hub速度往往很慢，并且很多时候我们需要一个本地的私有仓库只供网内使用。 Docker仓库实际上提供两方面的功能，一个是镜像管理，一个是认证。前者主要由docker-registry项目来实现，通过http服务来上传下载；后者可以通过docker-index（闭源）项目">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-07-27T16:03:29.000Z">
+<meta property="og:updated_time" content="2017-08-07T13:00:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Summer">
+<meta name="twitter:title" content="Docker私有仓库搭建">
+<meta name="twitter:description" content="私有仓库搭建Docker Registry官方提供了Docker Hub网站来作为一个公开的集中仓库。然而，本地访问Docker Hub速度往往很慢，并且很多时候我们需要一个本地的私有仓库只供网内使用。 Docker仓库实际上提供两方面的功能，一个是镜像管理，一个是认证。前者主要由docker-registry项目来实现，通过http服务来上传下载；后者可以通过docker-index（闭源）项目">
 
 
 
@@ -128,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/28/Summer/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/07/Docker私有仓库搭建/"/>
 
 
 
 
 
-  <title>Summer | LT's Notes</title>
+  <title>Docker私有仓库搭建 | LT's Notes</title>
   
 
 
@@ -253,7 +257,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/28/Summer/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/Docker私有仓库搭建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LT">
@@ -270,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Summer</h1>
+          <h1 class="post-title" itemprop="name headline">Docker私有仓库搭建</h1>
         
 
         <div class="post-meta">
@@ -282,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-28T00:03:29+08:00">
-                2017-07-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-07T20:56:53+08:00">
+                2017-08-07
               </time>
             
 
@@ -317,7 +321,37 @@
       
 
       
-        
+        <h1 id="私有仓库搭建"><a href="#私有仓库搭建" class="headerlink" title="私有仓库搭建"></a>私有仓库搭建</h1><h2 id="Docker-Registry"><a href="#Docker-Registry" class="headerlink" title="Docker Registry"></a>Docker Registry</h2><p>官方提供了Docker Hub网站来作为一个公开的集中仓库。然而，本地访问Docker Hub速度往往很慢，并且很多时候我们需要一个本地的私有仓库只供网内使用。</p>
+<p>Docker仓库实际上提供两方面的功能，一个是镜像管理，一个是认证。前者主要由docker-registry项目来实现，通过http服务来上传下载；后者可以通过docker-index（闭源）项目或者利用现成认证方案（如nginx）实现http请求管理。</p>
+<p>docker-registry既然也是软件应用，自然最简单的方法就是使用官方提供的已经部署好的镜像registry。官方文档中也给出了建议，直接运行sudo docker run -p 5000:5000 registry命令。这样确实能启动一个registry服务器，但是所有上传的镜像其实都是由docker容器管理，放在了/var/lib/docker/….某个目录下。而且一旦删除容器，镜像也会被删除。因此，我们需要想办法告诉docker容器镜像应该存放在哪里。registry镜像中启动后镜像默认位置是/tmp/registry，因此直接映射这个位置即可，比如到本机的/opt/data/registry目录下。</p>
+<h2 id="不带安全认证的本地私有仓库"><a href="#不带安全认证的本地私有仓库" class="headerlink" title="不带安全认证的本地私有仓库"></a>不带安全认证的本地私有仓库</h2><ol>
+<li><p>下载私有仓库镜像</p>
+<pre><code>[root@localhost ~]# docker pull registry
+Using default tag: latest
+latest: Pulling from library/registry
+90f4dba627d6: Pull complete 
+3a754cdc94a5: Pull complete 
+bf16d9b6d4c1: Pull complete 
+7eea83c9b7bb: Pull complete 
+23293c727551: Pull complete 
+Digest: sha256:f5552e60ffd56fecbe2f04b61a3089a9cd755bd9352b6b5ab22cf2208af6a3a8
+Status: Downloaded newer image for registry:latest
+</code></pre></li>
+<li><p>通过该镜像启动一个容器</p>
+<pre><code>[root@localhost ~]# docker run -d -p 5000:5000 -v /opt/data/registry:/tmp/registry registry
+0d042a2d7efe5f24becf343c26957b77c369054dd2e7c94d14d04f8a4df5715f
+</code></pre><p>参数说明： </p>
+<p>-d：表示容器后台运行</p>
+<p>-p：端口映射</p>
+<p>–restart=always：可以理解为开机启动。开机：就是启动docker客户端拉。</p>
+<p>–name registry：给容器取一个名字，方便识别和记忆</p>
+<p>-v:挂在本地文件到容器中。命令格式：hostdir:cdir[:rw|ro] 主机目录:容器目录[:读写权限]</p>
+<p>具体参数可以参考<a href="https://docs.docker.com/registry/" target="_blank" rel="external">registry官方文档地址</a></p>
+</li>
+<li><p>客户端使用</p>
+</li>
+</ol>
+<h2 id="搭建有安全认证的docker仓库私服"><a href="#搭建有安全认证的docker仓库私服" class="headerlink" title="搭建有安全认证的docker仓库私服"></a>搭建有安全认证的docker仓库私服</h2>
       
     </div>
 
@@ -344,6 +378,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
 
       
       
@@ -353,14 +393,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/08/07/Docker镜像制作/" rel="next" title="Docker镜像制作">
+                <i class="fa fa-chevron-left"></i> Docker镜像制作
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/08/05/Docker简介/" rel="prev" title="Docker简介">
-                Docker简介 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/07/Docker常用操作/" rel="prev" title="Docker常用操作">
+                Docker常用操作 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -409,8 +453,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -463,6 +516,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#私有仓库搭建"><span class="nav-number">1.</span> <span class="nav-text">私有仓库搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Registry"><span class="nav-number">1.1.</span> <span class="nav-text">Docker Registry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不带安全认证的本地私有仓库"><span class="nav-number">1.2.</span> <span class="nav-text">不带安全认证的本地私有仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建有安全认证的docker仓库私服"><span class="nav-number">1.3.</span> <span class="nav-text">搭建有安全认证的docker仓库私服</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
