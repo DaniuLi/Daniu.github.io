@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="镜像介绍镜像种类 系统级镜像:如Ubuntu镜像，CentOS镜像以及Debian镜像等；  工具栈镜像:如Golang镜像，Flask镜像，Tomcat镜像等；  服务级镜像:如MySQL镜像，MongoDB镜像，RabbitMQ镜像等；  应用级镜像:如WordPress镜像，DockerRegistry镜像等。   镜像与DockerfileDockerfile中的每一条指令都会对应于Doc">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker(四)镜像制作">
+<meta property="og:url" content="http://yoursite.com/2017/08/10/Docker(四)镜像制作/index.html">
+<meta property="og:site_name" content="LT&#39;s Notes">
+<meta property="og:description" content="镜像介绍镜像种类 系统级镜像:如Ubuntu镜像，CentOS镜像以及Debian镜像等；  工具栈镜像:如Golang镜像，Flask镜像，Tomcat镜像等；  服务级镜像:如MySQL镜像，MongoDB镜像，RabbitMQ镜像等；  应用级镜像:如WordPress镜像，DockerRegistry镜像等。   镜像与DockerfileDockerfile中的每一条指令都会对应于Doc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-10T14:37:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker(四)镜像制作">
+<meta name="twitter:description" content="镜像介绍镜像种类 系统级镜像:如Ubuntu镜像，CentOS镜像以及Debian镜像等；  工具栈镜像:如Golang镜像，Flask镜像，Tomcat镜像等；  服务级镜像:如MySQL镜像，MongoDB镜像，RabbitMQ镜像等；  应用级镜像:如WordPress镜像，DockerRegistry镜像等。   镜像与DockerfileDockerfile中的每一条指令都会对应于Doc">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/10/Docker(四)镜像制作/"/>
+
+
+
+
+
+  <title>Docker(四)镜像制作 | LT's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LT's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">LT's Notes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/10/Docker(四)镜像制作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LT's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker(四)镜像制作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T22:30:37+08:00">
+                2017-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="镜像介绍"><a href="#镜像介绍" class="headerlink" title="镜像介绍"></a>镜像介绍</h1><h2 id="镜像种类"><a href="#镜像种类" class="headerlink" title="镜像种类"></a>镜像种类</h2><ol>
+<li><p>系统级镜像:如Ubuntu镜像，CentOS镜像以及Debian镜像等；</p>
+</li>
+<li><p>工具栈镜像:如Golang镜像，Flask镜像，Tomcat镜像等；</p>
+</li>
+<li><p>服务级镜像:如MySQL镜像，MongoDB镜像，RabbitMQ镜像等；</p>
+</li>
+<li><p>应用级镜像:如WordPress镜像，DockerRegistry镜像等。</p>
+</li>
+</ol>
+<h2 id="镜像与Dockerfile"><a href="#镜像与Dockerfile" class="headerlink" title="镜像与Dockerfile"></a>镜像与Dockerfile</h2><p>Dockerfile中的每一条指令都会对应于Docker镜像中的一层。</p>
+<h2 id="镜像与文件系统"><a href="#镜像与文件系统" class="headerlink" title="镜像与文件系统"></a>镜像与文件系统</h2><p>Docker镜像的大小并不等于容器中文件系统内容的大小（不包括挂载文件，/proc、/sys等虚拟文件），即镜像大小和容器大小有着本质的区别</p>
+<h2 id="镜像共享关系"><a href="#镜像共享关系" class="headerlink" title="镜像共享关系"></a>镜像共享关系</h2><p>多个不同的Docker镜像可以共享相同的镜像层，举例说明：</p>
+<p>如果平均每个镜像500MB，岂不是100个镜像就需要准备50GB的存储空间？<br><a id="more"></a><br>结果往往不是我们想象的那样，假设docker build构建出来的镜像名分别为image1和image2，由于两个Dockerfile均基于ubuntu:14.04，因此，image1和image2这两个镜像均复用了镜像ubuntu:14.04，本地三个镜像的大小关系应该如下：</p>
+<p>ubuntu:14.04: 200MB</p>
+<p>image1:200MB(ubuntu:14.04)+20MB=220MB</p>
+<p>image2:200MB(ubuntu:14.04)+100MB=300MB</p>
+<p>如果仅仅是单纯的累加三个镜像的大小，那结果应该是：200+220+300=720MB，但是由于镜像复用的存在，实际占用的磁盘空间大小是：200＋20+100=320MB，足足节省了400MB的磁盘空间。</p>
+<h1 id="镜像的制作"><a href="#镜像的制作" class="headerlink" title="镜像的制作"></a>镜像的制作</h1><p>镜像包的制作有两种方法，一种是在容器内部修改后，直接通过 docker commit 命令来生成新的镜像包，另一种是通过编写 Dockerfile 来描述镜像包的构建过程，并通过docker build 命令来生成，这里对这两种方法做一个介绍</p>
+<h2 id="用commit命令制作镜像"><a href="#用commit命令制作镜像" class="headerlink" title="用commit命令制作镜像"></a>用commit命令制作镜像</h2><ol>
+<li><p>运行ubuntu容器，并执行bash，-i 参数保持输入打开， -t 分配一个伪终端</p>
+<pre><code>[root@localhost ~]# docker run -i -t ubuntu bash
+root@3b102b069e4a:/# 
+</code></pre></li>
+</ol>
+<ol>
+<li><p>宿主机上运行拷贝宿主机jdk目录到容器。3b102b069e4a 为容器ID</p>
+<pre><code>[root@localhost jvm]# docker cp java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/ 3b102b069e4a:/usr/local/
+</code></pre></li>
+<li><p>配置环境变量</p>
+<pre><code>root@3b102b069e4a:/usr/local# vi /etc/profile
+
+export JAVA_HOME=/usr/local/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+</code></pre></li>
+<li><p>退出docker容器        </p>
+<pre><code>root@3b102b069e4a:/usr/local# exit
+</code></pre></li>
+<li><p>查看刚才运行的容器</p>
+<pre><code>[root@localhost ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                   CREATED             STATUS                        PORTS               NAMES
+3b102b069e4a        ubuntu              &quot;bash&quot;                    24 minutes ago      Exited (130) 5 seconds ago                        confident_lumiere
+</code></pre></li>
+<li><p>查看不同，3b102b069e4a为容器ID。</p>
+<pre><code>[root@localhost ~]# docker diff 3b102b069e4a
+C /root
+A /root/.bash_history
+C /var
+C /var/lib
+C /var/lib/apt
+C /var/lib/apt/lists
+A /var/lib/apt/lists/lock
+A /var/lib/apt/lists/partial
+C /usr
+C /usr/local
+A /usr/local/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64
+A /usr/local/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre
+A /usr/local/java-1.8.0-openjdk-1.8.0.141-1.b16.el7_3.x86_64/jre/bin
+...
+</code></pre></li>
+<li><p>创建镜像</p>
+<pre><code>[root@localhost hello]# docker commit -m &quot;add jdk8&quot; 3b102b069e4a
+sha256:4f9bab60d59d134bd9b7d0b19f527b07d4f81428c221c2e623ebfbafde80fce0
+</code></pre><p> 注：仓库名和TAG没有填写</p>
+</li>
+<li><p>查看是否生成成功</p>
+</li>
+</ol>
+<pre><code>[root@localhost hello]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+&lt;none&gt;              &lt;none&gt;              4f9bab60d59d        9 seconds ago       250MB
+ubuntu              latest              14f60031763d        2 weeks ago         120MB
+</code></pre><h2 id="用Dockerfile制作镜像"><a href="#用Dockerfile制作镜像" class="headerlink" title="用Dockerfile制作镜像"></a>用Dockerfile制作镜像</h2><p>Dockfile是一种被Docker程序解释的脚本，Dockerfile由一条一条的指令组成，每条指令对应Linux下面的一条命令。Docker程序将这些Dockerfile指令翻译真正的Linux命令。</p>
+<p>Dockerfile有自己书写格式和支持的命令，Docker程序解决这些命令间的依赖关系，类似于Makefile。Docker程序将读取Dockerfile，根据指令生成定制的image。</p>
+<p>相比image这种黑盒子，Dockerfile这种显而易见的脚本更容易被使用者接受，它明确的表明image是怎么产生的。有了Dockerfile，当我们需要定制自己额外的需求时，只需在Dockerfile上添加或者修改指令，重新生成image即可，省去了敲命令的麻烦。</p>
+<h3 id="1-创建Dockerfile文件"><a href="#1-创建Dockerfile文件" class="headerlink" title="1. 创建Dockerfile文件"></a>1. 创建Dockerfile文件</h3><p>此处仅为示例，指令的详细用法请参考<a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">官方文档</a>。</p>
+<pre><code># 指定基于的基础镜像
+FROM ubuntu:13.10  
+
+# 维护者信息
+MAINTAINER sample &quot;sample@sample.com&quot;  
+
+# 镜像的指令操作
+# 获取APT更新的资源列表
+RUN echo &quot;deb http://archive.ubuntu.com/ubuntu precise main universe&quot;&gt; /etc/apt/sources.list
+# 更新软件
+RUN apt-get update  
+
+# Install curl  
+RUN apt-get -y install curl  
+
+# Install JDK 7  
+RUN cd /tmp &amp;&amp;  curl -L &apos;http://download.oracle.com/otn-pub/java/jdk/7u65-b17/jdk-7u65-linux-x64.tar.gz&apos; -H &apos;Cookie: oraclelicense=accept-securebackup-cookie; gpw_e24=Dockerfile&apos; | tar -xz  
+RUN mkdir -p /usr/lib/jvm  
+RUN mv /tmp/jdk1.7.0_65/ /usr/lib/jvm/java-7-oracle/  
+
+# Set Oracle JDK 7 as default Java  
+RUN update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-7-oracle/bin/java 300     
+RUN update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-7-oracle/bin/javac 300     
+
+# 设置系统环境
+ENV JAVA_HOME /usr/lib/jvm/java-7-oracle/  
+
+# Install tomcat7  
+RUN cd /tmp &amp;&amp; curl -L &apos;http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.8/bin/apache-tomcat-7.0.8.tar.gz&apos; | tar -xz  
+RUN mv /tmp/apache-tomcat-7.0.8/ /opt/tomcat7/  
+
+ENV CATALINA_HOME /opt/tomcat7  
+ENV PATH $PATH:$CATALINA_HOME/bin  
+
+# 复件tomcat7.sh到容器中的目录 
+ADD tomcat7.sh /etc/init.d/tomcat7  
+RUN chmod 755 /etc/init.d/tomcat7  
+
+# Expose ports.  指定暴露的端口
+EXPOSE 8080  
+
+# Define default command.  
+ENTRYPOINT service tomcat7 start &amp;&amp; tail -f /opt/tomcat7/logs/catalina.out
+</code></pre><p>示例说明如下：</p>
+<ol>
+<li><p>新建一个名为 Dockerfile 的文件。</p>
+</li>
+<li><p>在 Docker 文件里描述镜像的构建过程，创建一个ubuntu+tomcat的镜像</p>
+</li>
+<li><p>主要命令说明</p>
+<p> FROM： 必不可少的命令，从某个镜像作为基。如 FROM <image_name> ，或者 FROM <image_name>:<tag>. 如果不加tag，默认为latest。先从本地镜像仓库去搜索基镜像，如过本地没有，在去网上docker registry去寻找。</tag></image_name></image_name></p>
+<p> MAINTAINER：标明该Dockerfile作者及联系方式，可忽略不写</p>
+<p> RUN：建立新的镜像时，可以执行在系统里的命令，如安装特定的软件以及设置环境变量。</p>
+<p> ENV：设置系统环境变量（注意：写在/etc/profile里的命令在dockerfile这里会不生效，所以为改成ENV的方式）</p>
+<p> EXPOSE：开放容器内的端口，但不和宿主机进行映射。方便在宿主机上进行开发测试。（如需映射到宿主机端口，可在运行容器时使用 -p host_port:container_port）</p>
+<p> CMD：设置执行的命令，经常用于容器启动时指定的某个操作。如执行自定义脚本服务，或者是执行系统命令。CMD 只能存在一条，如在Dockerfile中有多条CMD的话，只有最后一条CMD生效！</p>
+<p> （上述 FROM， RUN， VOLUME， EXPOSE， CMD 等命令都是 Dockerfile 文件的基本语法元素，可以查看具体<a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="external">官方文档</a>了解使用方式。）</p>
+</li>
+</ol>
+<h3 id="3-构建镜像文件"><a href="#3-构建镜像文件" class="headerlink" title="3. 构建镜像文件"></a>3. 构建镜像文件</h3><p>通过 docker build 命令来制作镜像文件。 -t 选项为镜像取名， .则表示 Docker 文件在当前目录中。</p>
+<pre><code>[root@localhost dockerfile]# docker build -t ubuntu_tomcat_1 .
+</code></pre><h3 id="4-注意事项"><a href="#4-注意事项" class="headerlink" title="4. 注意事项"></a>4. 注意事项</h3><ol>
+<li><p>使用.dockerignore文件</p>
+<p> 为了在docker build过程中更快上传和更加高效，应该使用一个.dockerignore文件用来排除构建镜像时不需要的文件或目录。例如,除非.git在构建过程中需要用到，否则你应该将它添加到.dockerignore文件中，这样可以节省很多时间。</p>
+</li>
+<li><p>避免安装不必要的软件包</p>
+<p> 为了降低复杂性、依赖性、文件大小以及构建时间，应该避免安装额外的或不必要的包。例如，不需要在一个数据库镜像中安装一个文本编辑器。</p>
+</li>
+<li><p>每个容器都跑一个进程</p>
+<p> 在大多数情况下，一个容器应该只单独跑一个程序。解耦应用到多个容器使其更容易横向扩展和重用。如果一个服务依赖另外一个服务，可以参考 Linking Containers Together。</p>
+</li>
+<li><p>最小化层</p>
+<p> 我们知道每执行一个指令，都会有一次镜像的提交，镜像是分层的结构，对于 Dockerfile，应该找到可读性和最小化层之间的平衡。</p>
+</li>
+<li><p>多行参数排序</p>
+<p>如果可能，通过字母顺序来排序，这样可以避免安装包的重复并且更容易更新列表，另外可读性也会更强，添加一个空行使用 \ 换行:</p>
+<pre><code>RUN apt-get update &amp;&amp; apt-get install -y \
+bzr \
+cvs \
+git \
+mercurial \
+subversion
+</code></pre></li>
+<li><p>创建缓存</p>
+<p> 镜像构建过程中会按照 Dockerfile 的顺序依次执行，每执行一次指令 Docker 会寻找是否有存在的镜像缓存可复用，如果没有则创建新的镜像。如果不想使用缓存，则可以在docker build 时添加–no-cache=true选项。</p>
+<p> 从基础镜像开始就已经在缓存中了，下一个指令会对比所有的子镜像寻找是否执行相同的指令，如果没有则缓存失效。在大多数情况下只对比 Dockerfile 指令和子镜像就足够了。ADD 和 COPY 指令除外，执行 ADD 和 COPY 时存放到镜像的文件也是需要检查的，完成一个文件的校验之后再利用这个校验在缓存中查找，如果检测的文件改变则缓存失效。RUN apt-get -y update命令只检查命令是否匹配，如果匹配就不会再执行更新了。</p>
+<p> 为了有效地利用缓存，你需要保持你的Dockerfile一致，并且尽量在末尾修改。</p>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>镜像的制作，特别是怎么通过Dockerfile制作出一个最小化的镜像文件，细节要求比较高，后续会通过结合我们的版本具体实施。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/07/Docker私有仓库搭建/" rel="next" title="Docker私有仓库搭建">
+                <i class="fa fa-chevron-left"></i> Docker私有仓库搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/01/Docker(一)简介/" rel="prev" title="Docker(一)简介">
+                Docker(一)简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">LT</p>
+            <p class="site-description motion-element" itemprop="description">Just some notes.</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#镜像介绍"><span class="nav-number">1.</span> <span class="nav-text">镜像介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像种类"><span class="nav-number">1.1.</span> <span class="nav-text">镜像种类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像与Dockerfile"><span class="nav-number">1.2.</span> <span class="nav-text">镜像与Dockerfile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像与文件系统"><span class="nav-number">1.3.</span> <span class="nav-text">镜像与文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像共享关系"><span class="nav-number">1.4.</span> <span class="nav-text">镜像共享关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#镜像的制作"><span class="nav-number">2.</span> <span class="nav-text">镜像的制作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#用commit命令制作镜像"><span class="nav-number">2.1.</span> <span class="nav-text">用commit命令制作镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用Dockerfile制作镜像"><span class="nav-number">2.2.</span> <span class="nav-text">用Dockerfile制作镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建Dockerfile文件"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 创建Dockerfile文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-构建镜像文件"><span class="nav-number">2.2.2.</span> <span class="nav-text">3. 构建镜像文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-注意事项"><span class="nav-number">2.2.3.</span> <span class="nav-text">4. 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">2.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
